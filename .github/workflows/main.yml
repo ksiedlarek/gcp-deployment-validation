@@ -27,10 +27,11 @@ jobs:
     - name: Run curl on app link
       run: |
         STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ github.event.inputs.app_link }})
+        echo "$STATUS_CODE" >> $GITHUB_ENV
     - name: Verify status code
       if: ${{ env.STATUS_CODE == 200 }}
       run: |
-        CURL_TEST=true
+        echo "CURL_TEST=true" >> $GITHUB_ENV
     - name: Display values
       run: |
         echo "Curl test passed: $CURL_TEST"
