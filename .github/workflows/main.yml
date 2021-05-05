@@ -13,6 +13,9 @@ on:
       app_link:
         description: 'App link to query'
         required: true
+env:
+  STATUS_CODE: 0
+  CURL_TEST: false
 
 jobs:
   say_hello:
@@ -23,4 +26,12 @@ jobs:
         echo "- in ${{ github.event.inputs.home }}!"
     - name: Run curl on app link
       run: |
-        curl ${{ github.event.inputs.app_link }}
+        $STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${{ github.event.inputs.app_link }})
+    - name: Verify status code
+      if: ${{ env.STATUS_CODE == 200 }}
+      run: |
+        $CURL_TEST=true
+    - name: Display values
+      run: |
+        echo $CURL_TEST
+        echo $STATUS_CODE
