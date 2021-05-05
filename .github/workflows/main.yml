@@ -2,28 +2,20 @@ name: Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'Person to greet'
-        required: true
-        default: 'Mona the Octocat'
-      home:
-        description: 'location'
-        required: false
-        default: 'The Octoverse'
       app_link:
         description: 'App link to query'
+        required: true
+      run_id:
+        description: 'Run id of your deployment pipeline'
         required: true
 env:
   STATUS_CODE: 0
   CURL_TEST: false
 
 jobs:
-  say_hello:
+  validate-daployment:
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        echo "Hello ${{ github.event.inputs.name }}!"
-        echo "- in ${{ github.event.inputs.home }}!"
     - name: Run curl on app link
       run: |
         RESULT=$(curl -s -o /dev/null -w "%{http_code}" ${{ github.event.inputs.app_link }})
@@ -32,7 +24,10 @@ jobs:
       if: ${{ env.STATUS_CODE == 200 }}
       run: |
         echo "CURL_TEST=true" >> $GITHUB_ENV
-    - name: Display values
+    - name: Display curl test values
       run: |
         echo "Curl test passed: $CURL_TEST"
         echo "Status code: $STATUS_CODE"
+    - name: Check pipeline status
+      run: |
+        gh run view ${{ github.event.inputs.run_id }}
