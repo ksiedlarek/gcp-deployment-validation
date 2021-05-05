@@ -23,4 +23,4 @@ jobs:
         echo "- in ${{ github.event.inputs.home }}!"
     - name: Run curl on app link
       run: |
-        curl ${{ github.event.inputs.home }}
+        curl ${{ github.event.inputs.app_link }}
