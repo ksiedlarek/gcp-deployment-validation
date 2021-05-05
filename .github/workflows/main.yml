@@ -10,6 +10,9 @@ on:
         description: 'location'
         required: false
         default: 'The Octoverse'
+      app_link:
+        description: 'App link to query'
+        required: true
 
 jobs:
   say_hello:
@@ -18,3 +21,6 @@ jobs:
     - run: |
         echo "Hello ${{ github.event.inputs.name }}!"
         echo "- in ${{ github.event.inputs.home }}!"
+    - name: Run curl on app link
+      run: |
+        curl ${{ github.event.inputs.home }}
