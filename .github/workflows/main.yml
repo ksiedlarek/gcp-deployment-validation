@@ -1,4 +1,4 @@
-name: Manually triggered workflow
+name: Manualy triggered validation
 on:
   workflow_dispatch:
     inputs:
@@ -16,7 +16,7 @@ env:
   CURL_TEST: false
 
 jobs:
-  validate-daployment:
+  validate-deployment:
     runs-on: ubuntu-latest
     steps:
     - name: Run curl on app link
@@ -31,6 +31,9 @@ jobs:
       run: |
         echo "Curl test passed: $CURL_TEST"
         echo "Status code: $STATUS_CODE"
+    - name: Login to gh
+      run: |
+        gh auth login --with-token ${{ secrets.GH_TOKEN }}
     - name: Check if workflow ended with success
       run: |
         gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
