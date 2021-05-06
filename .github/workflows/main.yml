@@ -30,11 +30,9 @@ jobs:
     - name: Display curl test values
       run: |
         echo "Curl test passed: $CURL_TEST"
-        echo "Status code: $STATUS_CODE"
-    - name: Login to gh
-      run: |
-        brew install gh
-        gh auth login -h github.com --with-token < ${{ secrets.GH_TOKEN }}
+        echo "Status code: $STATUS_CODE" 
     - name: Check if workflow ended with success
       run: |
         gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
