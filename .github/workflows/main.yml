@@ -33,6 +33,7 @@ jobs:
         echo "Status code: $STATUS_CODE"
     - name: Login to gh
       run: |
+        brew install gh
         gh auth login --with-token ${{ secrets.GH_TOKEN }} -h github.com
     - name: Check if workflow ended with success
       run: |
