@@ -62,8 +62,8 @@ jobs:
     - name: Upload log file to GCP bucket
       uses: google-github-actions/upload-cloud-storage@main
       with:
-        path: "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log"
-        destination: ${{ env.BUCKET_NAME }}/${{github.event.inputs.project_name}}/${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log
+        path: "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+        destination: "${{ env.BUCKET_NAME }}/${{github.event.inputs.project_name}}/${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
         credentials: ${{ secrets.GCP_CREDENTIALS }}
 
     - name: Check if workflow ended with success
