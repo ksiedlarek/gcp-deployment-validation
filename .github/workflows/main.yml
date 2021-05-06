@@ -36,16 +36,16 @@ jobs:
         echo "Curl test passed: $CURL_TEST"
         echo "Status code: $STATUS_CODE"
     - name: Get Time
-        id: time
-        uses: nanzm/get-time-action@v1.1
-        with:
-          timeZone: 2
-          format: 'YYYY-MM-DD-HH-mm-ss'
-      - name: Set Time
-        env:
-          TIME: "${{ steps.time.outputs.time }}"
-        run: |
-          echo "TIME=$TIME" >> $GITHUB_ENV
+      id: time
+      uses: nanzm/get-time-action@v1.1
+      with:
+        timeZone: 2
+        format: 'YYYY-MM-DD-HH-mm-ss'
+    - name: Set Time
+      env:
+        TIME: "${{ steps.time.outputs.time }}"
+      run: |
+        echo "TIME=$TIME" >> $GITHUB_ENV
     - name: Create log file
       run: |
         gh run view ${{ github.event.inputs.run_id }} --log -R ${{ github.event.inputs.repo }} > "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
