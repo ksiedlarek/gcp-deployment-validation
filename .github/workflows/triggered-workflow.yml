@@ -44,7 +44,7 @@ jobs:
           echo "TIME=$TIME" >> $GITHUB_ENV
       - name: Create log file
         run: |
-          gh run view ${{ github.event.client_payload.run_id }} --log -R ${{ github.event.client_payload.repo }} > "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+          gh run view ${{ github.event.client_payload.run_id }} --log -R "github.com/${{ github.event.client_payload.repo }}" > "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
         env: 
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Upload log as artifact on GitHub
@@ -64,6 +64,6 @@ jobs:
 
       - name: Check if workflow ended with success
         run: |
-          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R github.com/${{ github.event.client_payload.repo }}
+          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R "github.com/${{ github.event.client_payload.repo }}"
         env: 
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
