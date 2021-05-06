@@ -34,7 +34,7 @@ jobs:
     - name: Login to gh
       run: |
         brew install gh
-        gh auth login --with-token ${{ secrets.GH_TOKEN }} -h github.com
+        gh auth login -h github.com --with-token < ${{ secrets.GH_TOKEN }}
     - name: Check if workflow ended with success
       run: |
         gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
