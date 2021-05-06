@@ -2,6 +2,9 @@ name: Manualy triggered validation
 on:
   workflow_dispatch:
     inputs:
+      project_name:
+        description: 'Project/app name, without spaces'
+        required: true
       app_link:
         description: 'App link to query'
         required: true
@@ -14,6 +17,7 @@ on:
 env:
   STATUS_CODE: 0
   CURL_TEST: false
+  BUCKET_NAME: demo-deployment-artifact-holder
 
 jobs:
   validate-deployment:
@@ -31,18 +35,37 @@ jobs:
       run: |
         echo "Curl test passed: $CURL_TEST"
         echo "Status code: $STATUS_CODE"
+    - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 2
+          format: 'YYYY-MM-DD-HH-mm-ss'
+      - name: Set Time
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
+        run: |
+          echo "TIME=$TIME" >> $GITHUB_ENV
     - name: Create log file
       run: |
-        gh run view ${{ github.event.inputs.run_id }} --log -R ${{ github.event.inputs.repo }} > "${{ github.event.inputs.run_id }}-out-log.txt"
+        gh run view ${{ github.event.inputs.run_id }} --log -R ${{ github.event.inputs.repo }} > "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
       env: 
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    - name: Upload log as artifact
+    - name: Upload log as artifact on GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: "${{ github.event.inputs.run_id }}-out-log"
-        path: "${{ github.event.inputs.run_id }}-out-log.txt"
+        name: "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log"
+        path: "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
         #retention-days: 0
         if-no-files-found: warn
+
+    - name: Upload log file to GCP bucket
+      uses: google-github-actions/upload-cloud-storage@main
+      needs: 
+      with:
+        path: "${{ github.event.inputs.run_id }}-out-log"
+        destination: ${{ env.BUCKET_NAME }}/${{github.event.inputs.project_name}}/${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log
+        credentials: ${{ secrets.GCP_CREDENTIALS }}
 
     - name: Check if workflow ended with success
       run: |
