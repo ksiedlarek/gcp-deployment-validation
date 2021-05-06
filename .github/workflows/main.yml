@@ -42,7 +42,7 @@ jobs:
         name: "${{ github.event.inputs.run_id }}-out-log"
         path: "${{ github.event.inputs.run_id }}-out-log.txt"
         #retention-days: 0
-      if-no-files-found: warn
+        if-no-files-found: warn
 
     - name: Check if workflow ended with success
       run: |
