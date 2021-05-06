@@ -10,3 +10,7 @@ jobs:
         run: |
           echo ${{ github.event.client_payload.sha }}
           echo ${{ github.event.client_payload.ref }}
+          echo ${{ github.event.client_payload.project_name }}
+          echo ${{ github.event.client_payload.run_id }}
+          echo ${{ github.event.client_payload.repo }}
+          echo ${{ github.event.client_payload.app_link }}
