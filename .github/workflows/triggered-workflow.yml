@@ -2,6 +2,11 @@ on:
   repository_dispatch:
     types: [deployment-validation]
 
+env:
+  STATUS_CODE: 0
+  CURL_TEST: false
+  BUCKET_NAME: demo-deployment-artifact-holder
+
 jobs:
   validate-deployment:
     runs-on: ubuntu-latest
@@ -14,3 +19,51 @@ jobs:
           echo ${{ github.event.client_payload.run_id }}
           echo ${{ github.event.client_payload.repo }}
           echo ${{ github.event.client_payload.app_link }}
+      - name: Run curl on app link
+        run: |
+          RESULT=$(curl -s -o /dev/null -w "%{response_code}" ${{ github.event.client_payload.app_link }})
+          echo "STATUS_CODE=$RESULT" >> $GITHUB_ENV
+      - name: Verify status code
+        if: ${{ env.STATUS_CODE == 200 }}
+        run: |
+          echo "CURL_TEST=true" >> $GITHUB_ENV
+      - name: Display curl test values
+        run: |
+          echo "Curl test passed: $CURL_TEST"
+          echo "Status code: $STATUS_CODE"
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 2
+          format: 'YYYY-MM-DD-HH-mm-ss'
+      - name: Set Time
+        env:
+          TIME: "${{ steps.time.outputs.time }}"
+        run: |
+          echo "TIME=$TIME" >> $GITHUB_ENV
+      - name: Create log file
+        run: |
+          gh run view ${{ github.event.client_payload.run_id }} --log -R ${{ github.event.client_payload.repo }} > "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Upload log as artifact on GitHub
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log"
+          path: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+          #retention-days: 0
+          if-no-files-found: warn
+
+      - name: Upload log file to GCP bucket
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          path: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+          destination: "${{ env.BUCKET_NAME }}/${{github.event.client_payload.project_name}}/${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Check if workflow ended with success
+        run: |
+          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R ${{ github.event.client_payload.repo }}
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
