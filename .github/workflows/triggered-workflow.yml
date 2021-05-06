@@ -6,6 +6,7 @@ jobs:
   validate-deployment:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-        echo ${{ github.event.client_payload.sha }}
-        echo ${{ github.event.client_payload.ref }}
+      - name: Display payload
+        run: |
+          echo ${{ github.event.client_payload.sha }}
+          echo ${{ github.event.client_payload.ref }}
