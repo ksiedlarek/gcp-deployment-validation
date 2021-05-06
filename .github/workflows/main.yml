@@ -8,6 +8,9 @@ on:
       run_id:
         description: 'Run id of your deployment pipeline'
         required: true
+      repo:
+        description: 'Repo link'
+        required: true
 env:
   STATUS_CODE: 0
   CURL_TEST: false
@@ -18,7 +21,7 @@ jobs:
     steps:
     - name: Run curl on app link
       run: |
-        RESULT=$(curl -s -o /dev/null -w "%{http_code}" ${{ github.event.inputs.app_link }})
+        RESULT=$(curl -s -o /dev/null -w "%{response_code}" ${{ github.event.inputs.app_link }})
         echo "STATUS_CODE=$RESULT" >> $GITHUB_ENV
     - name: Verify status code
       if: ${{ env.STATUS_CODE == 200 }}
@@ -28,6 +31,6 @@ jobs:
       run: |
         echo "Curl test passed: $CURL_TEST"
         echo "Status code: $STATUS_CODE"
-    - name: Check pipeline status
+    - name: Check if workflow ended with success
       run: |
-        gh run view ${{ github.event.inputs.run_id }}
+        gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
