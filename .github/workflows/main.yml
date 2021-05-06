@@ -30,7 +30,20 @@ jobs:
     - name: Display curl test values
       run: |
         echo "Curl test passed: $CURL_TEST"
-        echo "Status code: $STATUS_CODE" 
+        echo "Status code: $STATUS_CODE"
+    - name: Create log file
+      run: |
+        gh run view ${{ github.event.inputs.run_id }} --log -R ${{ github.event.inputs.repo }} > "${{ github.event.inputs.run_id }}-out-log.txt"
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: Upload log as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: "${{ github.event.inputs.run_id }}-out-log"
+        path: "${{ github.event.inputs.run_id }}-out-log.txt"
+        #retention-days: 0
+      if-no-files-found: warn
+
     - name: Check if workflow ended with success
       run: |
         gh run view ${{ github.event.inputs.run_id }} --exit-status -R ${{ github.event.inputs.repo }}
