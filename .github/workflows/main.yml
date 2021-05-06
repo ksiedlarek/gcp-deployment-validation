@@ -33,6 +33,6 @@ jobs:
         echo "Status code: $STATUS_CODE" 
     - name: Check if workflow ended with success
       run: |
-        gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
+        gh run view ${{ github.event.inputs.run_id }} --exit-status -R ${{ github.event.inputs.repo }}
       env: 
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
