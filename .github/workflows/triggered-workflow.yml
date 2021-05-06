@@ -64,6 +64,6 @@ jobs:
 
       - name: Check if workflow ended with success
         run: |
-          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R ${{ github.event.client_payload.repo }}
+          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R github.com/${{ github.event.client_payload.repo }}
         env: 
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
