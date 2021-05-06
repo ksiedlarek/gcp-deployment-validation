@@ -62,7 +62,7 @@ jobs:
     - name: Upload log file to GCP bucket
       uses: google-github-actions/upload-cloud-storage@main
       with:
-        path: "${{ github.event.inputs.run_id }}-out-log"
+        path: "${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log"
         destination: ${{ env.BUCKET_NAME }}/${{github.event.inputs.project_name}}/${{ github.event.inputs.run_id }}-${{ steps.time.outputs.time }}-out-log
         credentials: ${{ secrets.GCP_CREDENTIALS }}
 
