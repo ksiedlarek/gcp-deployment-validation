@@ -33,7 +33,7 @@ jobs:
         echo "Status code: $STATUS_CODE"
     - name: Login to gh
       run: |
-        gh auth login --with-token ${{ secrets.GH_TOKEN }}
+        gh auth login --with-token ${{ secrets.GH_TOKEN }} -h github.com
     - name: Check if workflow ended with success
       run: |
         gh run view ${{ github.event.inputs.run_id }} --exit-status -R {{ github.event.inputs.repo }}
