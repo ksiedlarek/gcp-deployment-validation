@@ -1,4 +1,4 @@
-name: Manualy triggered validation
+name: Manually triggered validation
 on:
   workflow_dispatch:
     inputs:
@@ -14,6 +14,7 @@ on:
       repo:
         description: 'Repo link'
         required: true
+        default: https://github.com/ksiedlarek/gke-sample-app-deployments
 env:
   STATUS_CODE: 0
   CURL_TEST: false
