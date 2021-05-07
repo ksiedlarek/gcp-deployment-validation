@@ -62,8 +62,8 @@ jobs:
           destination: "${{ env.BUCKET_NAME }}/${{github.event.client_payload.project_name}}/${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
           credentials: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Check if workflow ended with success
-        run: |
-          gh run view ${{ github.event.client_payload.run_id }} --exit-status -R "github.com/${{ github.event.client_payload.repo }}"
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+#       - name: Check if workflow ended with success
+#         run: |
+#           gh run view ${{ github.event.client_payload.run_id }} --exit-status -R "github.com/${{ github.event.client_payload.repo }}"
+#         env: 
+#           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
