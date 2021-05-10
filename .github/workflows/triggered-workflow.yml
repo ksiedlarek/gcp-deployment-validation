@@ -1,3 +1,4 @@
+name: Automatically triggered validation
 on:
   repository_dispatch:
     types: [deployment-validation]
