@@ -20,7 +20,7 @@ There are two ways of triggering pipelines:
     - RUN id of your deployment pipeline
     - Repository link (defaults to: https://github.com/ksiedlarek/gke-sample-app-deployments)
 
-<img src="/docs/img/run.png" width="auto" margin="auto">
+<img src="/docs/img/run-m.png" width="auto" margin="auto">
 
 <img src="/docs/img/flow-m.png" width="auto" margin="auto">
 
