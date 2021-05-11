@@ -12,8 +12,6 @@ Current validation is **simple** and can be expanded over time.
 There are two ways of triggering pipelines:
 - [automatic](https://github.com/marketplace/actions/repository-dispatch) - if workflow from gke-sample-app-deployments repository finishes successfully, at the very last step payload will be send to this repository.
 
-## Diagram
-
 <img src="/docs/img/flow-a.png" width="auto" margin="auto">
 
 - [manual](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow): you can trigger Manually triggered validation workflow from Actions tab. You will have to provide:
