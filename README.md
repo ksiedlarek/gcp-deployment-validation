@@ -37,7 +37,8 @@ There are two ways of triggering pipelines:
 2. Go to Repository Settings tab -> Secrets, and add:
     - GCP_CREDENTIALS -> base64 encoded json file content (your GCP service account credentials)
     - GH_TOKEN -> on your GitHub account level/organisation level, create access token that can read repository information and trigger workflows - paste it here. This is needed to query logs from other repositories. (if you don't want to do that, you can skip it - comment out section of code in the workflow responsible for log upload)
-    - Navigate to .github/workflows, in triggered-workflow.yml and manual-trigger.yml:
-        - change BUCKET_NAME to GCP bucket that exists on your GCP project - here all of the logs will be stored
+
+3. Navigate to .github/workflows, in triggered-workflow.yml and manual-trigger.yml:
+    - change BUCKET_NAME to GCP bucket that exists on your GCP project - here all of the logs will be stored
 
 **This repository is only a demo, it does not contain production-ready environment.**
