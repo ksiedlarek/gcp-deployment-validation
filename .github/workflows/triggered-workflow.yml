@@ -6,6 +6,7 @@ on:
 env:
   STATUS_CODE: 0
   CURL_TEST: false
+  # change to your bucket name
   BUCKET_NAME: demo-deployment-artifact-holder
 
 jobs:
@@ -53,6 +54,7 @@ jobs:
         with:
           name: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log"
           path: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
+          # set the value below if you want to have specific retention period
           #retention-days: 0
           if-no-files-found: warn
 
@@ -62,7 +64,7 @@ jobs:
           path: "${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
           destination: "${{ env.BUCKET_NAME }}/${{github.event.client_payload.project_name}}/${{ github.event.client_payload.run_id }}-${{ steps.time.outputs.time }}-out-log.txt"
           credentials: ${{ secrets.GCP_CREDENTIALS }}
-
+# Below part is not needed in automatically triggered flow: this workflow will not get triggered if other pipeline won't finish with success
 #       - name: Check if workflow ended with success
 #         run: |
 #           gh run view ${{ github.event.client_payload.run_id }} --exit-status -R "github.com/${{ github.event.client_payload.repo }}"
