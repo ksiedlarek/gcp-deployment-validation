@@ -24,10 +24,10 @@ There are two ways of triggering pipelines:
 
 <img src="/docs/img/flow-m.png" width="auto" margin="auto">
 
-Current checks:
-- run curl on provided IP/app link
+### Current validations
+- run curl on provided IP/app link - check if response code is 200
 - get logs from specific run from gke-sample-app-deployments repository (using [GitHub CLI](https://github.com/github/hub))
-- upload logs to bucket on GCP platform
+- upload logs from provided workflow run to bucket on GCP platform
 - check if specific workflow run from gke-sample-app-deployments ended successfully (for manual trigger only, using GitHub CLI)
 
 ## Setup
