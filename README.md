@@ -17,7 +17,7 @@ There are two ways of triggering pipelines:
 - [manual](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow): you can trigger _Manually triggered validation_ workflow from Actions tab. You will have to provide:
     - project name (without spaces)
     - IP/link of your app to be checked by curl
-    - RUN id of your deployment pipeline
+    - RUN id of your deployment pipeline (you will need to output run id from workflow that you want to get checked, see more [here](https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context))
     - Repository link (defaults to: https://github.com/ksiedlarek/gke-sample-app-deployments)
 
 <img src="/docs/img/run-m.png" width="auto" margin="auto">
